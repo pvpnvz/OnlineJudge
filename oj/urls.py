@@ -35,7 +35,9 @@ urlpatterns = [
     url(r'^admin/template/(?P<template_dir>\w+)/(?P<template_name>\w+).html$', AdminTemplateView.as_view(),
         name="admin_template"),
 
-    url(r'^login/$', TemplateView.as_view(template_name="oj/account/login.html"), name="user_login_page"),
+    # url(r'^login/$', TemplateView.as_view(template_name="oj/account/login.html"), name="user_login_page"),
+    url(r'^loginFunction.php/$', "account.views.caslogin", name="cas_user_login_api"),
+    url(r'^login/$', "account.views.caslogin", name="cas_user_login_api"),
     url(r'^logout/$', "account.views.logout", name="user_logout_api"),
     url(r'^register/$', TemplateView.as_view(template_name="oj/account/register.html"),
         name="user_register_page"),

@@ -35,7 +35,6 @@ from .serializers import (UserLoginSerializer, UserRegisterSerializer,
 
 from .decorators import super_admin_required
 
-
 class UserLoginAPIView(APIView):
     def post(self, request):
         """
@@ -68,10 +67,47 @@ class UserLoginAPIView(APIView):
             return serializer_invalid_response(serializer)
 
 
+def caslogin(request):
+    import requests
+    appId = 'zxxx'
+    casLoginUrl = "https://cas.dgut.edu.cn/?appid=%s" % appId
+    casCheckTokenUrl = "http://cas-#.dgut.edu.cn/ssoapi/checktoken"
+    token = request.GET.get('token')
+    if token:
+        print('Login success')
+        tokens = token.split('-')
+        if len(tokens) < 3:
+            return http.HttpResponseRedirect(casLoginUrl)
+        else:
+            apiUrl = casCheckTokenUrl.replace('#', tokens[1])
+            userIp = request.META['REMOTE_ADDR']
+            paramStr = {
+                'token': token,
+                'userip': userIp,
+                'appid': appId
+            }
+            print "token:%s, userip:%s" % (token, userIp)
+            r = requests.post(apiUrl, data=paramStr)
+            resultModel = r.json()
+            if resultModel.get('Result') == 0:
+                un = resultModel['LoginName']
+                p = '111111'
+                user = auth.authenticate(username = un, password = p)
+                auth.login(request, user)
+                # ResponseRedirect link
+                rdr = "/"
+            else:
+                rdr = casLoginUrl
+    else:
+        print('there is no token')
+        rdr =  casLoginUrl
+    return http.HttpResponseRedirect(rdr)
+
+    
 #@login_required
 def logout(request):
     auth.logout(request)
-    return http.HttpResponseRedirect("/")
+    return http.HttpResponseRedirect("https://cas.dgut.edu.cn/user/logout?service=http://172.28.89.91")
 
 
 def index_page(request):
