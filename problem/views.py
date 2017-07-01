@@ -193,7 +193,8 @@ class ProblemAdminAPIView(APIView):
         keyword = request.GET.get("keyword", None)
         if keyword:
             problems = problems.filter(Q(title__contains=keyword) |
-                                       Q(description__contains=keyword))
+                                       Q(description__contains=keyword) |
+                                       Q(id__contains=keyword))
 
         return paginate(request, problems, ProblemSerializer)
 
@@ -398,7 +399,7 @@ def problem_list_page(request, page=1):
     # 搜索的情况
     keyword = request.GET.get("keyword", "").strip()
     if keyword:
-        problems = problems.filter(Q(title__contains=keyword) | Q(description__contains=keyword))
+        problems = problems.filter(Q(title__contains=keyword) | Q(description__contains=keyword) | Q(id__contains=keyword))
 
     difficulty_order = request.GET.get("order_by", None)
     if difficulty_order:

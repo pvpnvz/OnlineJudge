@@ -418,7 +418,7 @@ def contest_list_page(request, page=1):
     # 搜索的情况
     keyword = request.GET.get("keyword", "").strip()
     if keyword:
-        contests = contests.filter(Q(title__contains=keyword) | Q(description__contains=keyword))
+        contests = contests.filter(Q(title__contains=keyword) | Q(description__contains=keyword) | Q(id__contains=keyword))
 
     # 筛选我能参加的比赛
     join = request.GET.get("join", None)
