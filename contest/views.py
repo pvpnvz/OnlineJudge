@@ -276,9 +276,9 @@ class ContestProblemAdminAPIView(APIView):
             except ContestProblem.DoesNotExist:
                 return error_response(u"比赛题目不存在")
 
-        contest_problems = ContestProblem.objects.all().order_by("sort_index")
+        contest_problems = ContestProblem.objects.all().order_by("id")
         if request.user.admin_type != SUPER_ADMIN:
-            contest_problems = contest_problems.filter(created_by=request.user).order_by("sort_index")
+            contest_problems = contest_problems.filter(created_by=request.user).order_by("id")
         visible = request.GET.get("visible", None)
         if visible:
             contest_problems = contest_problems.filter(visible=(visible == "true"))
@@ -288,7 +288,7 @@ class ContestProblemAdminAPIView(APIView):
                                                        Q(description__contains=keyword))
         contest_id = request.GET.get("contest_id", None)
         if contest_id:
-            contest_problems = contest_problems.filter(contest__id=contest_id).order_by("sort_index")
+            contest_problems = contest_problems.filter(contest__id=contest_id).order_by("id")
 
         return paginate(request, contest_problems, ContestProblemSerializer)
 
@@ -403,7 +403,7 @@ def contest_problems_list_page(request, contest_id):
     比赛所有题目的列表页
     """
     contest = Contest.objects.get(id=contest_id)
-    contest_problems = ContestProblem.objects.filter(contest=contest, visible=True).select_related("contest").order_by("sort_index")
+    contest_problems = ContestProblem.objects.filter(contest=contest, visible=True).select_related("contest").order_by("id")
     return render(request, "oj/contest/contest_problems_list.html", {"contest_problems": contest_problems,
                                                                      "contest": {"id": contest_id}})
 
