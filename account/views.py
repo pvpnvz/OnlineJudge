@@ -406,7 +406,7 @@ class ResetPasswordAPIView(APIView):
 
 def user_index_page(request, username):
     try:
-        user = User.objects.get(username=username)
+        user = User.objects.get(id=username)
     except User.DoesNotExist:
         return error_page(request, u"用户不存在")
 
