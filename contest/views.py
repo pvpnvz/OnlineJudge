@@ -467,7 +467,7 @@ def _get_rank(contest_id):
 @check_user_contest_permission
 def contest_rank_page(request, contest_id):
     contest = Contest.objects.get(id=contest_id)
-    contest_problems = ContestProblem.objects.filter(contest=contest, visible=True).order_by("sort_index")
+    contest_problems = ContestProblem.objects.filter(contest=contest, visible=True).order_by("id")
 
     force_real_time_rank = False
     if request.GET.get("force_real_time_rank") == "true" and (request.user.admin_type == SUPER_ADMIN or request.user == contest.created_by):
