@@ -132,8 +132,6 @@ urlpatterns = [
         name="avatar_settings_page"),
     url(r'^account/sso/$', SSOAPIView.as_view(), name="sso_api"),
     url(r'^api/account/userprofile/$', UserProfileAPIView.as_view(), name="userprofile_api"),
-    url(r'^api/two_factor_auth/$', TwoFactorAuthAPIView.as_view(), name="two_factor_auth_api"),
-    url(r'^two_factor_auth/$', TemplateView.as_view(template_name="oj/account/two_factor_auth.html"), name="two_factor_auth_page"),
     url(r'^rank/(?P<page>\d+)/$', "account.views.user_rank_page", name="user_rank_page"),
     url(r'^rank/$', "account.views.user_rank_page", name="user_rank_page"),
     url(r'^api/avatar/upload/', AvatarUploadAPIView.as_view(), name="avatar_upload_api"),
