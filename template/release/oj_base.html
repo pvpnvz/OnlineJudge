@@ -69,7 +69,7 @@
                                 <li><a href="/admin/">后台管理</a></li>
                                 <li role="separator" class="divider"></li>
                             {% endif %}
-                            <li><a href="/user/{{ request.user.username }}/">我的主页</a></li>
+                            <li><a href="/user/{{ request.user.id }}/">我的主页</a></li>
                             <li><a href="/submissions/?my=true">我的提交</a></li>
                             <li><a href="/account/settings/">设置</a></li>
                             <li role="separator" class="divider"></li>
