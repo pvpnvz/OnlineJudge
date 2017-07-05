@@ -72,6 +72,7 @@ def caslogin(request):
     appId = 'zxxx'
     casLoginUrl = "https://cas.dgut.edu.cn/?appid=%s" % appId
     casCheckTokenUrl = "http://cas-#.dgut.edu.cn/ssoapi/checktoken"
+    casLogoutUrl = "https://cas.dgut.edu.cn/user/logout?service=http://172.28.89.91"
     token = request.GET.get('token')
     if token:
         print('Login success')
@@ -93,9 +94,12 @@ def caslogin(request):
                 un = resultModel['LoginName']
                 p = '111111'
                 user = auth.authenticate(username = un, password = p)
-                auth.login(request, user)
-                # ResponseRedirect link
-                rdr = "/"
+                if user:
+                    auth.login(request, user)
+                    # ResponseRedirect link
+                    rdr = "/"
+                else:
+                    rdr = casLogoutUrl
             else:
                 rdr = casLoginUrl
     else:
