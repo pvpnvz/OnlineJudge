@@ -67,6 +67,21 @@ class UserLoginAPIView(APIView):
             return serializer_invalid_response(serializer)
 
 
+def write_session_key(request):
+    '''
+    Update a user's unique session key
+    '''
+    from django.contrib.sessions.models import Session
+    user = request.user
+    old_session_key = user.session_key
+    user.session_key = request.session.session_key
+    try:
+        Session.objects.filter(session_key=old_session_key).first().delete()
+    except:
+        pass
+    user.save()
+    return http.HttpResponseRedirect('/')
+
 def caslogin(request):
     import requests
     appId = 'zxxx'
@@ -96,9 +111,10 @@ def caslogin(request):
                 user = auth.authenticate(username = un, password = p)
                 if user:
                     auth.login(request, user)
-                    # ResponseRedirect link
-                    rdr = "/"
+                    # request will include new session key
+                    return write_session_key(request)
                 else:
+                    # ResponseRedirect link
                     rdr = casLogoutUrl
             else:
                 rdr = casLoginUrl

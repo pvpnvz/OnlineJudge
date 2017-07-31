@@ -43,6 +43,7 @@ class User(AbstractBaseUser):
     openapi_appkey = models.CharField(max_length=35, blank=True, null=True)
     # 是否禁用用户
     is_forbidden = models.BooleanField(default=False)
+    session_key = models.CharField(max_length=32, blank=True, null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
