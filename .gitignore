@@ -62,6 +62,7 @@ static/src/upload_image/*
 build.txt
 tmp/
 test_case/
+release/
 upload/
 custom_settings.py
 docker-compose.yml
