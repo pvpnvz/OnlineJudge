@@ -49,7 +49,7 @@ class Contest(models.Model):
     groups = models.ManyToManyField(Group)
     # 是否可见 false的话相当于删除
     visible = models.BooleanField(default=True)
-    restricted_network = models.CharField(max_length=18, default="")
+    restricted_network = models.CharField(max_length=50, default="")
 
     @property
     def status(self):
