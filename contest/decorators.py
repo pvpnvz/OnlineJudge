@@ -101,7 +101,7 @@ def check_user_contest_permission(func):
         # Network limeted
         if contest.restricted_network\
         and contest.contest_type in [GROUP_CONTEST, PASSWORD_PROTECTED_GROUP_CONTEST]:
-            uip = ip_address(unicode(request.META["REMOTE_ADDR"]))
+            uip = ip_address(unicode(request.META["HTTP_X_FORWARDED_FOR"]))
             rip = ip_network(unicode(contest.restricted_network))
             if not uip in rip:
                 if request.is_ajax():
