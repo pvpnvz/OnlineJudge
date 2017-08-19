@@ -30,6 +30,7 @@ from .serializers import (CreateContestSerializer, ContestSerializer, EditContes
                           CreateContestProblemSerializer, ContestProblemSerializer,
                           ContestPasswordVerifySerializer,
                           EditContestProblemSerializer)
+from ipaddress import ip_network
 
 
 class ContestAdminAPIView(APIView):
@@ -120,7 +121,6 @@ class ContestAdminAPIView(APIView):
             if data["start_time"] >= data["end_time"]:
                 return error_response(u"比赛的开始时间必须早于比赛结束的时间")
             if data["contest_type"] in [GROUP_CONTEST, PASSWORD_PROTECTED_GROUP_CONTEST]:
-                from ipaddress import ip_network
                 try:
                     ip_network(unicode(data["restricted_network"]))
                 except:
