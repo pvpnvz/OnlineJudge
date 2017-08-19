@@ -119,6 +119,12 @@ class ContestAdminAPIView(APIView):
                     return error_response(u"请至少选择一个小组")
             if data["start_time"] >= data["end_time"]:
                 return error_response(u"比赛的开始时间必须早于比赛结束的时间")
+            if data["contest_type"] in [GROUP_CONTEST, PASSWORD_PROTECTED_GROUP_CONTEST]:
+                from ipaddress import ip_network
+                try:
+                    ip_network(unicode(data["restricted_network"]))
+                except:
+                    return error_response(u"限制网段格式有误")
 
             # 之前是封榜，现在要开放，需要清除缓存
             if contest.real_time_rank == False and data["real_time_rank"] == True:
@@ -134,6 +140,7 @@ class ContestAdminAPIView(APIView):
             contest.end_time = dateparse.parse_datetime(data["end_time"])
             contest.visible = data["visible"]
             contest.password = data["password"]
+            contest.restricted_network = data["restricted_network"]
             contest.save()
 
             contest.groups.clear()

@@ -11,6 +11,7 @@ from utils.shortcuts import error_response, error_page
 from account.models import SUPER_ADMIN, ADMIN
 from .models import (Contest, PASSWORD_PROTECTED_CONTEST, PASSWORD_PROTECTED_GROUP_CONTEST, PUBLIC_CONTEST, GROUP_CONTEST,
                      CONTEST_ENDED, CONTEST_NOT_START, CONTEST_UNDERWAY)
+from ipaddress import ip_address, ip_network
 
 
 def check_user_contest_permission(func):
@@ -78,6 +79,7 @@ def check_user_contest_permission(func):
                     return render(request, "oj/contest/no_contest_permission.html",
                                   {"reason": "password_protect", "show_tab": False, "contest": contest})
 
+                
         # 指定小组参加的
         if contest.contest_type == GROUP_CONTEST:
             if not contest.groups.filter(id__in=request.user.group_set.all()).exists():
@@ -95,6 +97,18 @@ def check_user_contest_permission(func):
                     else:
                         return render(request, "oj/contest/no_contest_permission.html",
                                       {"reason": "password_protect", "show_tab": False, "contest": contest})
+
+        # Network limeted
+        if contest.restricted_network\
+        and contest.contest_type in [GROUP_CONTEST, PASSWORD_PROTECTED_GROUP_CONTEST]:
+            uip = ip_address(unicode(request.META["REMOTE_ADDR"]))
+            rip = ip_network(unicode(contest.restricted_network))
+            if not uip in rip:
+                if request.is_ajax():
+                    return error_response(u">比赛仅限定网段可以参加, 你不在该网段中.")
+                else:
+                    return render(request, "oj/contest/no_contest_permission.html",
+                                  {"reason": "network_limited", "show_tab": False, "contest": contest})
 
         # 比赛没有开始
         if contest.status == CONTEST_NOT_START:

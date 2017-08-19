@@ -50,6 +50,7 @@ class EditContestSerializer(serializers.Serializer):
     end_time = serializers.DateTimeField()
     groups = serializers.ListField(child=serializers.IntegerField(), required=False, default=[])
     visible = serializers.BooleanField()
+    restricted_network = serializers.CharField(max_length=20, required=False, default="")
 
 
 class ContestProblemSampleSerializer(serializers.ListField):
