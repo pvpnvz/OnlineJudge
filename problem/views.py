@@ -182,7 +182,7 @@ class ProblemAdminAPIView(APIView):
                 return error_response(u"题目不存在")
 
         # 获取问题列表
-        problems = Problem.objects.all().order_by("-create_time")
+        problems = Problem.objects.all().order_by("-id")
 
         if request.user.admin_type != SUPER_ADMIN:
             problems = problems.filter(created_by=request.user)
