@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'judge_dispatcher',
 
     'rest_framework',
+    'django_extensions',
 )
 
 if DEBUG:
