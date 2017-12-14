@@ -597,6 +597,9 @@ def contest_problem_submissions_list_page(request, contest_id, page=1):
     for item in submissions:
         item['title'] = title[item['problem_id']]
 
+    for item in submissions:
+        item['user'] = User.objects.get(id=item['user_id'])
+
     previous_page = next_page = None
     try:
         previous_page = submissions.previous_page_number()

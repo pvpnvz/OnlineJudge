@@ -53,6 +53,13 @@ class User(AbstractBaseUser):
     class Meta:
         db_table = "user"
 
+    @property
+    def my_group(self):
+        try:
+            return self.group_relation.first().group.name
+        except:
+            return ''
+
 
 def _random_avatar():
     import random
