@@ -23,7 +23,7 @@ class Group(models.Model):
 
 class UserGroupRelation(models.Model):
     group = models.ForeignKey(Group)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='group_relation')
     join_time = models.DateTimeField(auto_now_add=True)
     
     class Meta:

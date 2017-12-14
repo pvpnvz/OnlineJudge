@@ -462,7 +462,8 @@ def _get_rank(contest_id):
             select_related("user"). \
             order_by("-total_ac_number", "total_time"). \
             values("id", "user__id", "user__username", "user__real_name", "user__userprofile__student_id",
-                   "contest_id", "submission_info", "total_submission_number", "total_ac_number", "total_time")
+                   "contest_id", "submission_info", "total_submission_number", "total_ac_number", "total_time",
+                   "user__group_relation__group__name")
     rank_number = 1
     for item in rank:
         # 只有有ac的题目而且不是打星的队伍才参与排名

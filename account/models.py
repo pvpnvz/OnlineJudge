@@ -87,5 +87,12 @@ class UserProfile(models.Model):
         self.accepted_problem_number -= 1
         self.save(update_fields=["accepted_problem_number"])
 
+    @property
+    def my_group(self):
+        try:
+            return self.user.group_relation.first().group.name
+        except:
+            return ''
+
     class Meta:
         db_table = "user_profile"
